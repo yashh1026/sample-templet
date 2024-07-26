@@ -1,1 +1,37 @@
-xyz
+name: CI
+on:
+  workflow_call:
+    inputs:
+      runner_tag:
+        description: 'Tag of the specific runner to be used'
+        type: string
+        default: self-hosted
+        required: false
+      profile:
+        type: string
+        description: "Profile for conan"
+        default: "default"
+       
+jobs:
+  build:
+    runs-on:  ${{ inputs.runner_tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Conan install
+        uses: conan-io/conan-action@v3
+        with:
+          profile: ${{ inputs.profile }}
+
+      - name: Conan build
+        uses: conan-io/conan-action@v3
+        with:
+          args: build --build missing
+          profile: ${{ inputs.profile }}
+
+      - name: Conan test
+        uses: conan-io/conan-action@v3
+        with:
+          args: test --build missing
+          profile: ${{ inputs.profile }}
