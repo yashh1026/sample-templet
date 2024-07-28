@@ -11,7 +11,47 @@ on:
         type: string
         description: "Profile for conan"
         default: "default"
-       
+jobs:
+  build:
+    runs-on:  ${{ inputs.runner_tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Conan
+        run: pip install conan
+
+      - name: Install CMake
+        run: sudo apt-get install -y cmake
+
+      - name: Create Conan profile
+        run: |
+          #conan profile new default --detect
+          #conan profile update settings.compiler.libcxx=libstdc++11 default
+
+      - name: Install dependencies
+        run: conan install . --profile default --install-folder=build
+
+      - name: Configure CMake
+        run: cmake . -Bbuild
+
+      - name: Build the project
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: build
+
 jobs:
   build:
     runs-on:  ${{ inputs.runner_tag }}
@@ -29,6 +69,7 @@ jobs:
         with:
           args: build --build missing
           profile: ${{ inputs.profile }}
+        
 
       - name: Conan test
         uses: conan-io/conan-action@v3
