@@ -24,3 +24,5 @@ This repository is a generic template for creating a simple "Hello World" Conan 
 4. qd
 
 5. s
+
+6. wd
