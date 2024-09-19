@@ -16,3 +16,4 @@ This repository is a generic template for creating a simple "Hello World" Conan 
 ## Using the Package in Your Project
 
 1. **Create a Conanfile.txt:**  In your project directory, create a `Conanfile.txt` file:
+2. cwbevabqwjqbwoiqbc1wpiwqpicbwqpcbwqupcbwpciqb
